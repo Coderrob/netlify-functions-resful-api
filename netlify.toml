@@ -2,4 +2,4 @@
 functions = "functions"
 
 [dev]
-functionsPort = 8885
+functionsPort = 9999

@@ -11,7 +11,7 @@ const {
   ERROR_RESPONSE,
   NOT_FOUND_RESPONSE,
 } = require("../lib/responses");
-const db = require("../lib/db");
+const db = require("../lib/supadb");
 const FUNCTION_PATH = "/.netlify/functions/todos";
 
 const handler = async (request, _context) => {
@@ -31,8 +31,8 @@ const handler = async (request, _context) => {
    */
   const response = new Promise((resolve) => {
     crossroads.ignoreCase = true;
-    crossroads.addRoute(`GET${FUNCTION_PATH}{?query}`, (query) => {
-      const { offset, limit } = query;
+    crossroads.addRoute(`GET${FUNCTION_PATH}:?query:`, (query) => {
+      const { offset, limit } = query || {};
       const filter = {
         offset: +offset || 0,
         limit: +limit || 100,
