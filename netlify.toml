@@ -1,2 +1,5 @@
 [build]
 functions = "functions"
+
+[dev]
+functionsPort = 8885

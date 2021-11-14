@@ -1,3 +1,8 @@
+/** @license
+ * MIT License
+ * Copyright (c) 2021 Rob Lindley
+ */
+
 const { expect } = require("chai");
 const { handler } = require("../../src/api/todos");
 

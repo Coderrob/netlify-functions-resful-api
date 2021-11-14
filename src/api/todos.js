@@ -1,3 +1,8 @@
+/** @license
+ * MIT License
+ * Copyright (c) 2021 Rob Lindley
+ */
+
 const crossroads = require("crossroads");
 const {
   createResponse,
@@ -7,11 +12,11 @@ const {
   NOT_FOUND_RESPONSE,
 } = require("../lib/responses");
 const db = require("../lib/db");
-const FUNCTION_BASE_URL = "/.netlify/functions/todos";
+const FUNCTION_PATH = "/.netlify/functions/todos";
 
 const handler = async (request, _context) => {
   /**
-   * Destructure the request using
+   * Destructure the request object
    *
    * @param {String} path the relative path to the invoked function
    * @param {String} httpMethod the HTTP verb used in the request
@@ -25,7 +30,8 @@ const handler = async (request, _context) => {
    * to be resolved by a promise.
    */
   const response = new Promise((resolve) => {
-    crossroads.addRoute(`GET${FUNCTION_BASE_URL}{?query}`, (query) => {
+    crossroads.ignoreCase = true;
+    crossroads.addRoute(`GET${FUNCTION_PATH}{?query}`, (query) => {
       const { offset, limit } = query;
       const filter = {
         offset: +offset || 0,
@@ -33,13 +39,13 @@ const handler = async (request, _context) => {
       };
       return resolve(db.getTodos(filter));
     });
-    crossroads.addRoute(`POST${FUNCTION_BASE_URL}`, () =>
+    crossroads.addRoute(`POST${FUNCTION_PATH}`, () =>
       resolve(db.addTodo(JSON.parse(body)))
     );
-    crossroads.addRoute(`PATCH${FUNCTION_BASE_URL}/{id}`, (id) =>
+    crossroads.addRoute(`PATCH${FUNCTION_PATH}/{id}`, (id) =>
       resolve(db.updateTodo(id, JSON.parse(body)))
     );
-    crossroads.addRoute(`DELETE${FUNCTION_BASE_URL}/{id}`, (id) =>
+    crossroads.addRoute(`DELETE${FUNCTION_PATH}/{id}`, (id) =>
       resolve(db.deleteTodo(id))
     );
     /**

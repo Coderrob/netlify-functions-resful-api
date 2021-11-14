@@ -1,3 +1,8 @@
+/** @license
+ * MIT License
+ * Copyright (c) 2021 Rob Lindley
+ */
+
 /**
  * API error response object
  */
