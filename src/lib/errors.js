@@ -4,4 +4,6 @@ const ErrorType = {
   PATH_NOT_FOUND: "PathNotFound",
 }
 
-module.exports = { ErrorType }
+module.exports = {
+  ErrorType,
+};
