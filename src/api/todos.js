@@ -11,6 +11,7 @@ const {
   ERROR_RESPONSE,
   NOT_FOUND_RESPONSE,
 } = require("../lib/responses");
+const { ErrorType } = require('../lib/errors');
 const db = require("../lib/supadb");
 const FUNCTION_PATH = "/.netlify/functions/todos";
 
@@ -30,8 +31,11 @@ const handler = async (request, _context) => {
    * to be resolved by a promise.
    */
   const response = new Promise((resolve) => {
+    // Set all crossroads routes to match case-insensitive
     crossroads.ignoreCase = true;
+    // GET route defined with optional query parameters
     crossroads.addRoute(`GET${FUNCTION_PATH}:?query:`, (query) => {
+      // Always be prepared for pagination :)
       const { offset, limit } = query || {};
       const filter = {
         offset: +offset || 0,
@@ -54,7 +58,7 @@ const handler = async (request, _context) => {
      */
     crossroads.bypassed.add(() => {
       const error = new Error();
-      error.name = "PathNotFound";
+      error.name = ErrorType.PATH_NOT_FOUND;
       throw error;
     });
   });
@@ -71,9 +75,9 @@ const handler = async (request, _context) => {
     return createResponse(statusCode, data);
   } catch (error) {
     switch (error?.name) {
-      case "BadRequest":
+      case ErrorType.BAD_REQUEST:
         return BAD_RESPONSE;
-      case "PathNotFound":
+      case ErrorType.PATH_NOT_FOUND:
         return NOT_FOUND_RESPONSE;
       default:
         return ERROR_RESPONSE;
