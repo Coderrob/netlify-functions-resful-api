@@ -13,6 +13,14 @@ const {
 } = require("../lib/responses");
 const { ErrorType } = require('../lib/errors');
 const db = require("../lib/supadb");
+
+/**
+ * When using redirect rules to change './netlify/functions'
+ * to '/api' this function path will need to be updated. I 
+ * would suggest driving the base path of the function from
+ * an environment variable. Default to './netlify/functions'
+ * for local testing.
+ */
 const FUNCTION_PATH = "/.netlify/functions/todos";
 
 const handler = async (request, _context) => {
